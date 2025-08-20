@@ -10,7 +10,7 @@ const createBook = async (req: Request, res: Response) => {
       data,
     });
   } catch (error: any) {
-    res.status(404).send({
+    res.status(400).send({
       success: false,
       message: "Validation failed.",
       error,
@@ -29,17 +29,23 @@ const getBook = async (req: Request, res: Response) => {
     const query: any = {};
     if (filter) query.genre = filter;
 
-    const books = await Book.find(query)
+    const data = await Book.find(query)
       .sort({ [sortBy as string]: sort === "desc" ? -1 : 1 })
       .limit(Number(limit));
+
+    if (!data)
+      return res.status(404).json({
+        success: false,
+        message: "Book not found",
+      });
 
     res.json({
       success: true,
       message: "Books retrieved successfully",
-      data: books,
+      data,
     });
   } catch (error) {
-    res.send({
+    res.status(500).json({
       success: false,
       message: "Error fetching books",
       error,
@@ -50,20 +56,6 @@ const getBook = async (req: Request, res: Response) => {
 const getBookById = async (req: Request, res: Response) => {
   const bookId = req.params.bookId;
   const data = await Book.findById(bookId);
-
-  // try{
-  //   res.send({
-  //     success: true,
-  //     message: "Book retrieved successfully",
-  //     data
-  //   })
-  // }catch(error){
-  //   res.send({
-  //     success: false,
-  //     message: "Error fetching books.",
-  //     error
-  //   })
-  // }
   try {
     if (!data)
       return res.status(404).json({
@@ -85,8 +77,54 @@ const getBookById = async (req: Request, res: Response) => {
   }
 };
 
+const updateBook = async (req: Request, res: Response) => {
+  const bookId = req.params.bookId;
+  const data = await Book.findByIdAndUpdate(bookId, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  try {
+    if (!data)
+      return res.status(404).json({
+        success: false,
+        message: "Book not found",
+      });
+
+    res.json({
+      success: true,
+      message: "Book update successfully",
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Update Book failed.",
+      error,
+    });
+  }
+};
+const deleteBook = async (req: Request, res: Response) => {
+  const bookId = req.params.bookId;
+  const data = await Book.findByIdAndDelete(bookId);
+  try {
+    res.send({
+      success: true,
+      message: "Book deleted successfully",
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Delete failed",
+      error,
+    });
+  }
+};
+
 export const bookController = {
   createBook,
   getBook,
   getBookById,
+  updateBook,
+  deleteBook,
 };
