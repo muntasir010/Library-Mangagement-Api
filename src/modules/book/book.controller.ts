@@ -39,9 +39,47 @@ const getBook = async (req: Request, res: Response) => {
       data: books,
     });
   } catch (error) {
-    res.status(404).json({
+    res.send({
       success: false,
       message: "Error fetching books",
+      error,
+    });
+  }
+};
+
+const getBookById = async (req: Request, res: Response) => {
+  const bookId = req.params.bookId;
+  const data = await Book.findById(bookId);
+
+  // try{
+  //   res.send({
+  //     success: true,
+  //     message: "Book retrieved successfully",
+  //     data
+  //   })
+  // }catch(error){
+  //   res.send({
+  //     success: false,
+  //     message: "Error fetching books.",
+  //     error
+  //   })
+  // }
+  try {
+    if (!data)
+      return res.status(404).json({
+        success: false,
+        message: "Book not found",
+      });
+
+    res.json({
+      success: true,
+      message: "Book retrieved successfully",
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching book",
       error,
     });
   }
@@ -50,4 +88,5 @@ const getBook = async (req: Request, res: Response) => {
 export const bookController = {
   createBook,
   getBook,
+  getBookById,
 };
