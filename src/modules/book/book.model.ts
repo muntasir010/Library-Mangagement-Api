@@ -49,5 +49,12 @@ const bookSchema = new Schema<IBook>(
   }
 );
 
+
+// instance methods when update availability copies are 0
+bookSchema.methods.updateAvailability = function () {
+  this.available = this.copies > 0;
+  return this.save();
+};
+
 const Book = model<IBook>("Book", bookSchema);
 export default Book;
