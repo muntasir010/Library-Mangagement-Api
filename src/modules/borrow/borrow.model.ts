@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import { IBorrow } from "./borrow.interface";
+import Book from "../book/book.model";
 
 const borrowSchema = new Schema<IBorrow>(
   {
@@ -24,4 +25,24 @@ const borrowSchema = new Schema<IBorrow>(
   }
 );
 
+// Middleware: Reduce book copies before saving
+borrowSchema.pre("save", async function (next) {
+  const borrow = this as any; // temporary type cast
+  const book = await Book.findById(borrow.book); // no .lean()
+  if (!book) return next(new Error("Book not found"));
+
+  if (book.copies < borrow.quantity) {
+    return next(new Error("Not enough copies available"));
+  }
+
+  book.copies -= borrow.quantity;
+
+  try {
+    await (book as any).updateAvailability(); 
+  } catch (err) {
+    return next(err as Error);
+  }
+
+  next();
+});
 export const Borrow = model<IBorrow>("Borrow", borrowSchema);
