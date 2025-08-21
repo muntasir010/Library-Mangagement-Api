@@ -9,7 +9,7 @@ const createBook = async (req: Request, res: Response) => {
       message: "Book Created Successfully.",
       data,
     });
-  } catch (error: any) {
+  } catch (error) {
     res.status(400).send({
       success: false,
       message: "Validation failed.",
@@ -26,7 +26,7 @@ const getBook = async (req: Request, res: Response) => {
       sort = "desc",
       limit = "4",
     } = req.query;
-    const query: any = {};
+    const query:any = {};
     if (filter) query.genre = filter;
 
     const data = await Book.find(query)

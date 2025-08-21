@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start:prod": "nodemon ./dist/server.js",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "lint": "npx eslint",
+    "lint:fix": "npx eslint . --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,9 +22,13 @@
     "mongoose": "^8.17.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.33.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/mongoose": "^5.11.96",
-    "ts-node-dev": "^2.0.0"
+    "eslint": "^9.33.0",
+    "globals": "^16.3.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript-eslint": "^8.40.0"
   }
 }
