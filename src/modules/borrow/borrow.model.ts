@@ -27,8 +27,8 @@ const borrowSchema = new Schema<IBorrow>(
 
 // Middleware: Reduce book copies before saving
 borrowSchema.pre("save", async function (next) {
-  const borrow = this as any; // temporary type cast
-  const book = await Book.findById(borrow.book); // no .lean()
+  const borrow = this as any; 
+  const book = await Book.findById(borrow.book); 
   if (!book) return next(new Error("Book not found"));
 
   if (book.copies < borrow.quantity) {
