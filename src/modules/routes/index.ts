@@ -1,6 +1,6 @@
 
 import express from "express";
-import bookRoute from "../book/book.route";
+import bookRoute from "../books/books.route";
 import { borrowRoute } from "../borrow/borrow.route";
 
 const routes = express.Router();
