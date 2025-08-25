@@ -18,7 +18,7 @@ const createBook = async (req: Request, res: Response) => {
   }
 };
 
-const getBook = async (req: Request, res: Response) => {
+const getAllBooks = async (req: Request, res: Response) => {
   try {
     const {
       filter,
@@ -53,7 +53,7 @@ const getBook = async (req: Request, res: Response) => {
   }
 };
 
-const getBookById = async (req: Request, res: Response) => {
+const getSingleBook = async (req: Request, res: Response) => {
   const bookId = req.params.bookId;
   const data = await Book.findById(bookId);
   try {
@@ -107,6 +107,12 @@ const deleteBook = async (req: Request, res: Response) => {
   const bookId = req.params.bookId;
   const data = await Book.findByIdAndDelete(bookId);
   try {
+     if (!data)
+      return res.status(404).json({
+        success: false,
+        message: "Book not found",
+      });
+
     res.send({
       success: true,
       message: "Book deleted successfully",
@@ -123,8 +129,8 @@ const deleteBook = async (req: Request, res: Response) => {
 
 export const bookController = {
   createBook,
-  getBook,
-  getBookById,
+  getAllBooks,
+  getSingleBook,
   updateBook,
   deleteBook,
 };

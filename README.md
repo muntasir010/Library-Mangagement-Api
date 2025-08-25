@@ -13,7 +13,7 @@ It allows managing books (CRUD), borrowing books with business rules, and genera
 - Error Handling
 - Clean Project Structure
 
-# 📂 Project Structure
+## 📂 Project Structure
 ├── src
 │   ├── config/           
 │   ├── modules ──├──book/ 

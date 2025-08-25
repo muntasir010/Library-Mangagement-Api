@@ -1,32 +1,51 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
-import config from "./config";
 import mongoose from "mongoose";
+import config from "./config";
 import routes from "./modules/routes";
-
+const port = config.port;
 const app = express();
-app.use(cors());
+
+app.use(
+  cors({
+    origin: ['http://localhost:5000', "https://library-management-api-psi-rose.vercel.app/"],
+    credentials: true,
+  })
+);
 app.use(express.json());
+
 app.use(routes);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send({
-    success: true,
-    message: "Library management api is here.",
-  });
+app.get("/", (req, res) => {
+  res.send("Server running");
 });
 
-app.listen(config.port, () => {
-  console.log(`✅ Server Connect on Port ${5000}`);
-});
+// app.listen(port, () => {
+//   console.log(`server running on port: ${port}`);
+// });
 
-async function server() {
+async function main() {
   try {
     await mongoose.connect(config.database_url!);
-    console.log("✅ Connected to Database");
+    console.log(`connect to database on port ${port}`);
+
+    app.listen(port, () => {
+      console.log(`server running on port: ${port}`);
+    });
   } catch (error) {
-    console.log(`Server error ${server}`);
+    console.error("❌ Database connection failed:", error);
   }
 }
 
-server();
+// async function server() {
+//   try {
+//     await mongoose.connect(config.database_url!);
+
+//     console.log(`connect to database on port ${port}`);
+//   } catch (error) {
+//     console.error(`server error: ${error}`);
+//   }
+// }
+
+// server();
+main();
