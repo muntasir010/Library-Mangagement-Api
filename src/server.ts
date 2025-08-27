@@ -8,13 +8,16 @@ const app = express();
 
 app.use(
   cors({
-    origin: ['http://localhost:5000', "https://library-management-api-psi-rose.vercel.app/"],
+    origin: [
+      "http://localhost:5000",
+      "https://library-management-api-psi-rose.vercel.app/",
+    ],
     credentials: true,
   })
 );
 app.use(express.json());
 
-app.use(routes);
+app.use("/api", routes);
 
 app.get("/", (req, res) => {
   res.send("Server running");
