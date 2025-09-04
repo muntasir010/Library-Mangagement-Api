@@ -51,7 +51,7 @@ npm run build
 npm start
 
 ## 📖 API Endpoints
-[https://library-management-api-psi-rose.vercel.app/]
+[https://library-management-api-psi-rose.vercel.app/api]
 
 ### Books
 
